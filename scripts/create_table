@@ -162,6 +162,10 @@ CREATE TABLE IF NOT EXISTS crm_products (
                                     COMMENT 'Product numeric ID from source; always populated in observed data',
     prd_key         VARCHAR(50)     NULL
                                     COMMENT 'Product business key from source (e.g. CO-RF-FR-R92B-58); sized 50 to absorb any extended variants',
+    prd_key2        VARCHAR(50)     NULL
+                                    COMMENT 'New column generated from prd_key',     
+    cat_key         VARCHAR(50)     NULL
+                                    COMMENT 'New column generated from prd_key',   
     prd_nm          VARCHAR(255)    NULL
                                     COMMENT 'Product name as-received from source',
     prd_cost        INT             NULL
