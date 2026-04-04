@@ -1,38 +1,36 @@
 ## Silver Layer — `dw_silver`
 
-The silver layer contains cleaned and standardised data transformed from the raw bronze layer.
+'''The silver layer contains cleaned and standardised data transformed from the raw bronze layer.
 All tables are loaded via a single stored procedure that handles deduplication, null handling,
-data type casting, and value normalisation across all 6 source tables (3 CRM + 3 ERP).
+data type casting, and value normalisation across all 6 source tables (3 CRM + 3 ERP).'''
 
 ### What gets cleaned
-| Table | Transformations Applied |
-|---|---|
-| `crm_customers` | Deduplicated by `cst_key`, trimmed names, normalised gender & marital status, date cast |
-| `crm_products` | Deduplicated by `prd_key`, expanded product line codes, derived `prd_end_dt` via LEAD |
-| `crm_sales` | Integer dates cast to DATE, recalculated sales = qty × price, negatives/zeros resolved |
-| `erp_cust_az12` | Stripped NAS prefix from CID, nullified future birthdates, normalised gender values |
-| `erp_loc_a101` | Removed hyphens from CID, standardised country name variants (US/USA → America) |
-| `erp_px_cat_g1v2` | Trimmed whitespace, stripped carriage returns from last column |
+`crm_customers` -- Deduplicated by `cst_key`, trimmed names, normalised gender & marital status, date cast 
+`crm_products` -- Deduplicated by `prd_key`, expanded product line codes, derived `prd_end_dt` via LEAD 
+`crm_sales` -- Integer dates cast to DATE, recalculated sales = qty × price, negatives/zeros resolved 
+`erp_cust_az12` -- Stripped NAS prefix from CID, nullified future birthdates, normalised gender values 
+`erp_loc_a101` -- Removed hyphens from CID, standardised country name variants (US/USA → America) 
+`erp_px_cat_g1v2` -- Trimmed whitespace, stripped carriage returns from last column 
 
 ### Prerequisites
-- Bronze layer must be loaded first before calling the silver procedure
-- Run the bronze load script manually since `LOAD DATA` cannot run inside a stored procedure
+-- Bronze layer must be loaded first before calling the silver procedure
+-- Run the bronze load script manually since `LOAD DATA` cannot run inside a stored procedure
 
 ### How to use
 
-**Step 1 — Load bronze (run as plain script)**
+-- Step 1 — Load bronze (run as plain script)
 ```sql
 -- SET GLOBAL local_infile = 1;
 -- Then run the full bronze load script
 ```
 
-**Step 2 — Load silver (call the procedure)**
+-- Step 2 — Load silver (call the procedure)
 ```sql
 -- CALL dw_silver.load_silver();
 ```
 
-The procedure automatically truncates each silver table before inserting,
-making it safe to re-run at any time without creating duplicates.
+-- The procedure automatically truncates each silver table before inserting,
+-- making it safe to re-run at any time without creating duplicates.
 
 DELIMITER $$
 
